@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Scaledrone channel ID
   const channelID = 'fDFO6KFGLXFBD0jS';
-  
+
   // Generate random usernames for Nate and Ani
   const nateUsername = "Nate";
   const aniUsername = "Ani";
@@ -28,25 +28,24 @@ document.addEventListener("DOMContentLoaded", function() {
       drone.publish({
         room: 'chat-room',
         message,
-        username: nateUsername // Always use Nate's username
+        username: nateUsername
       });
       messageInput.value = "";
     }
   });
 
-  drone.on('message', message => {
+  drone.on('message', (message) => {
     const messageElement = document.createElement("div");
     messageElement.className = "message";
-    
-    // Determine the appropriate username
-    const senderUsername = message.member.clientData.username === nateUsername ? nateUsername : aniUsername;
+
+    const senderUsername = message.clientData.username === nateUsername ? nateUsername : aniUsername;
     
     messageElement.textContent = `${senderUsername}: ${message.data}`;
     chatBox.appendChild(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
   });
 
-  messageInput.addEventListener("keydown", event => {
+  messageInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       sendButton.click();
       event.preventDefault();
