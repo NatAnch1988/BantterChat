@@ -3,14 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const messageInput = document.getElementById("message-input");
   const sendButton = document.getElementById("send-button");
 
-  // Scaledrone channel ID
-  const channelID = 'fDFO6KFGLXFBD0jS';
-
-  // Generate random usernames for Nate and Ani
   const nateUsername = "Nate";
   const aniUsername = "Ani";
+  const channelID = 'fDFO6KFGLXFBD0jS';
 
-  // Connect to Scaledrone
   const drone = new Scaledrone(channelID);
 
   drone.on('open', error => {
@@ -25,22 +21,22 @@ document.addEventListener("DOMContentLoaded", function() {
   sendButton.addEventListener("click", function() {
     const message = messageInput.value.trim();
     if (message !== "") {
+      const username = nateUsername;
       drone.publish({
         room: 'chat-room',
         message,
-        username: nateUsername
+        username
       });
       messageInput.value = "";
     }
   });
 
   drone.on('message', (message) => {
+    const senderUsername = message.clientData.username === nateUsername ? nateUsername : aniUsername;
+    const messageText = message.data;
     const messageElement = document.createElement("div");
     messageElement.className = "message";
-
-    const senderUsername = message.clientData.username === nateUsername ? nateUsername : aniUsername;
-    
-    messageElement.textContent = `${senderUsername}: ${message.data}`;
+    messageElement.textContent = `${senderUsername}: ${messageText}`;
     chatBox.appendChild(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
   });
